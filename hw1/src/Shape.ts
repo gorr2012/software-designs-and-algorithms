@@ -10,6 +10,7 @@ export abstract class Shape {
   constructor(points: Point[], color: string, filled: boolean);
 
   constructor(points: Point[], color?: string, filled?: boolean) {
+    this.checkNumberOfPoints(points);
     if(typeof color !== 'string' && typeof color !== 'string') {
       this.color = 'green';
       this.filled = true;
@@ -18,21 +19,20 @@ export abstract class Shape {
       this.filled = filled;
     }
     this.points = points;
-    this.checkNumberOfPoints();
   }
 
-  private checkNumberOfPoints () {
-    if (!this.points || this.points.length < 3) throw new Error('should fail to be created with 2 points');
+  private checkNumberOfPoints (points: Point[]) {
+    if (points.length < 3) throw new Error('should fail to be created with 2 points');
   }
   
-  public toString() {
+  toString() {
     const points = this.points.join(', ');
     const filled = this.filled ? '' : 'not ';
 
     return `A Shape with color of ${this.color} and ${filled}filled. Points: ${points}.`;
   }
 
-  public getPerimeter() {    
+  getPerimeter() {    
     return this.points.reduce((acc, cur, i) => acc + cur.distance(this.points[i+1]), 0)
   }
 }

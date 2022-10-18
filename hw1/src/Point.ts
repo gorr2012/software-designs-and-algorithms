@@ -1,3 +1,5 @@
+type D<T> = (p2: T, p1: T) => T;
+
 export class Point {
   x: number;
   y: number;
@@ -7,22 +9,22 @@ export class Point {
     this.y = y; 
   }
 
-  public toString () {
+  toString () {
     return `(${this.x}, ${this.y})`
   }
 
-  public distance(x: Point): number;
-  public distance(x: number, y: number): number;
-  public distance(): number;
+  distance(x: Point): number;
+  distance(x: number, y: number): number;
+  distance(): number;
 
-  public distance(x?: unknown, y?: unknown): number {
-    const {sqrt, pow} = Math;
+  distance(x?: number | Point, y?: number): number {
+    const {hypot} = Math;
+    
+    const x2 = (x as Point)?.x ?? x as number;
+    const y2 = (x as Point)?.y ?? y;
 
-    const xd = (x1: number, x2: number): number => pow((x2-x1), 2);
-    const yd = (y1: number, y2: number): number => pow((y2-y1), 2);
+    const d: D<number> = (p2 = 0, p1 = 0) => p2-p1;
 
-    if(typeof x === 'number' && typeof y === 'number') return sqrt(xd(this.x, x) + yd(this.y, y));
-    if (x instanceof Point) return sqrt(xd(this.x, x.x) + yd(this.y, x.y));
-    return sqrt(xd(0, this.x) + yd(0, this.y));
+   return hypot(d(x2, this.x), d(y2, this.y));
   }
 }
